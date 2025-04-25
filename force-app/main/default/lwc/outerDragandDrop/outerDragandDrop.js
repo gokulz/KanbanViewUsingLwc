@@ -1,10 +1,15 @@
 import { LightningElement, wire} from 'lwc';
 import {getListUi} from 'lightning/uiListApi';
+import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import OPPORTUNITY_OBJECT from '@salesforce/schema/Opportunity';
+import STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
 
 
 export default class OuterDragandDrop extends LightningElement {
     records;
+    pickValues;
+
+    //fetching the opportunity
      @wire(getListUi,{
         objectApiName : OPPORTUNITY_OBJECT,
         listViewApiName : 'AllOpportunities'
@@ -33,4 +38,29 @@ export default class OuterDragandDrop extends LightningElement {
             console.log(error);
         }
      }
+     //to get metadata about specific object
+     @wire(getObjectInfo,{
+         objectApiName: OPPORTUNITY_OBJECT,
+     }) objectInfo
+
+     //fetching the stage picklistvalue
+
+    @wire(getPicklistValues, {
+        recordTypeId: '$objectInfo.data.defaultRecordTypeId',
+        fieldApiName: STAGE_FIELD
+    }) 
+    stagePicklistValues({data, error}){
+      if(data){
+        console.log('Stage Picklist : ' , data);
+        this.pickValues = data.values.map(item => item.value)
+      } if(error){
+        console.log(error);
+      }
+    }
+
+    //getter to calculate the width 
+    get calcWidth(){
+        let len = this.pickValues.length +1;
+        return `width: calc(100% / ${len})`;
+    }
 }

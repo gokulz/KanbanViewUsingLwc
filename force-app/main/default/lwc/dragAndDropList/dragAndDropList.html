@@ -1,0 +1,14 @@
+<template>
+
+    <ul class="slds-has-dividers_around-space dropZone slds-p-around_medium" style="height: 70vh; overflow-y: auto; ">
+
+        <template for:each={records} for:item="recordItem">
+
+            <c-drag-and-drop-card stage={stage} record={recordItem} key={recordItem.Id}></c-drag-and-drop-card>
+
+
+        </template>
+
+    </ul>
+    
+</template>

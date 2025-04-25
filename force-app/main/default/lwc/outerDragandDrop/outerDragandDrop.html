@@ -1,4 +1,17 @@
 <template>
-    
-    <h1>Kanaban view Component</h1>
+    <div class="card_wrapper">
+        <template for:each={pickValues} for:item="item">
+            <div class="stageContainer" key={item}  style={calcWidth}>
+                <h1 class="column-heading">{item}</h1>
+                  <!--calling the child component in the parent component-->
+            <c-drag-and-drop-list stage={item} records={records}>
+                
+            </c-drag-and-drop-list>
+
+            </div>
+
+          
+        </template>
+
+    </div>
 </template>
