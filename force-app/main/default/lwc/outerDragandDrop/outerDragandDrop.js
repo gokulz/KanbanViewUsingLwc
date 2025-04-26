@@ -1,13 +1,18 @@
 import { LightningElement, wire} from 'lwc';
 import {getListUi} from 'lightning/uiListApi';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
+import { updateRecord } from 'lightning/uiRecordApi';
+import {refreshApex} from '@salesforce/apex';
 import OPPORTUNITY_OBJECT from '@salesforce/schema/Opportunity';
 import STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
+import ID_FIELD from '@salesforce/schema/Opportunity.Id';
+import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 
 
 export default class OuterDragandDrop extends LightningElement {
     records;
     pickValues;
+    recordId; 
 
     //fetching the opportunity
      @wire(getListUi,{
@@ -61,6 +66,40 @@ export default class OuterDragandDrop extends LightningElement {
     //getter to calculate the width 
     get calcWidth(){
         let len = this.pickValues.length +1;
-        return `width: calc(100% / ${len})`;
+        return `width: calc(100vw / ${len})`;
     }
+    handleListItemDrag(event){
+        this.recordId = event.detail
+    }
+    handleItemDrop(event){
+        let stage = event.detail
+        this.updateHandler(stage)
+    }
+
+    updateHandler(stage){
+        const fields = {};
+        fields[ID_FIELD.fieldApiName] = this.recordId;
+        fields[STAGE_FIELD.fieldApiName] = stage;
+        const recordInput ={fields}
+        updateRecord(recordInput)
+        .then(()=>{
+            console.log("Updated Successfully")
+            this.showToast()
+            return refreshApex(this.wiredListView)
+        }).catch(error=>{
+            console.error(error)
+        })
+    }
+   
+ 
+    showToast(){
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title:'Success',
+                message:'Stage updated Successfully',
+                variant:'success'
+            })
+        )
+    }
+
 }

@@ -1,3 +1,31 @@
 <template>
-    <div>Card Component</div>
+    <template if:true={isSameStage}>
+    <li class="slds-item slds-var-m-around_small" draggable="true" ondragstart={itemDragStart}>
+        <article class="slds-tile slds-tile_board">
+            <h3 class="slds-truncate" title={record.Name}>
+                <a href="#" data-id={record.Id} onclick={navigationOppHandler}>
+                    <span class="slds-truncate" data-id={record.Id}>
+                        {record.Name}
+                    </span>
+                </a>
+            </h3>
+            <div class="slds-tile_detail slds-text-body_small">
+                <p class="slds-text-heading_small">Amount:  ${record.Amount}</p>
+                <p class="slds-truncate" title={record.AccountName}>
+                    <a href="#" data-id={record.AccountId} onclick={navigationAccHandler}>
+                        <span class="slds-truncate" data-id={record.AccountId}>
+                            {record.AccountName}
+                        </span>
+                    </a>
+                </p>
+                <p class="slds-truncate" title={record.CloseDate}>
+                    CloseDate : {record.CloseDate}
+                </p>
+
+            </div>
+
+        </article>
+
+      </li>
+ </template>
 </template>

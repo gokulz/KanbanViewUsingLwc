@@ -4,8 +4,9 @@
             <div class="stageContainer" key={item}  style={calcWidth}>
                 <h1 class="column-heading">{item}</h1>
                   <!--calling the child component in the parent component-->
-            <c-drag-and-drop-list stage={item} records={records}>
-                
+            <c-drag-and-drop-list stage={item} records={records}  onlistitemdrag={handleListItemDrag}
+            onitemdrop={handleItemDrop}>
+    
             </c-drag-and-drop-list>
 
             </div>
